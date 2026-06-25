@@ -1,22 +1,20 @@
 package plataformajuegos.vista;
 
-import java.awt.CardLayout;
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Font;
-import java.awt.GridLayout;
+import java.awt.*;
 import java.awt.event.*;
 
 import javax.swing.*;
 
 import plataformajuegos.controlador.ControladorPrincipal;
+import plataformajuegos.util.*;
 
 public class PanelLogin extends JPanel implements ActionListener{
 
-    private JPanel contenedorDer;
+    private PanelFondoAnimado contenedorDer;
     private CardLayout cardLayoutDer;
     private JButton decoPasapalabra;
     private JButton decoAhorcado;
+    private JButton decoLogo;
     private JButton botonInicioSesion;
     private JButton botonCrearCuenta;
     private JLabel labelMensajeLogin;
@@ -27,7 +25,6 @@ public class PanelLogin extends JPanel implements ActionListener{
     private JPasswordField regPass1;
     private JPasswordField regPass2;
     private ControladorPrincipal cp;
-
     
     public PanelLogin(ControladorPrincipal cp){
         this.cp=cp;
@@ -37,34 +34,49 @@ public class PanelLogin extends JPanel implements ActionListener{
         JPanel panelIzq = new JPanel();
         panelIzq.setLayout(null);
         panelIzq.setBackground(new Color(230, 40, 106));
+
+        decoLogo = new BotonRedondeado("S", 30);
+        decoLogo.setText("S");
+        decoLogo.setFont(new Font("Arial Black", Font.BOLD, 20));
+        decoLogo.setBounds(40, 60, 50, 50);
+        decoLogo.setForeground(new Color(255, 105, 180));
+        decoLogo.setEnabled(false);
+        panelIzq.add(decoLogo);
+
         JLabel labelLogo = new JLabel("Sistema Juegos");
-        labelLogo.setFont(labelLogo.getFont().deriveFont(Font.BOLD));
-        labelLogo.setBounds(40, 60, 300, 50);
+        labelLogo.setFont(new Font("Arial", Font.BOLD, 32));
+        labelLogo.setForeground(Color.WHITE);
+        labelLogo.setBounds(100, 60, 300, 50);
         panelIzq.add(labelLogo);
 
         JLabel labelTitulo = new JLabel("<html>Juega, compite<br>y adivina.</html>");
-        labelTitulo.setFont(labelTitulo.getFont().deriveFont(Font.BOLD));
-        labelTitulo.setBounds(50, 300, 400, 120);
+        labelTitulo.setFont(new Font("Arial Black", Font.BOLD, 36));
+        labelTitulo.setForeground(Color.WHITE);
+        labelTitulo.setBounds(50, 200, 400, 120);
         panelIzq.add(labelTitulo);
 
         JLabel labelSubTitulo = new JLabel("<html>Dos clásicos de palabras en una sola app de<br>escritorio.</html>");
-        labelSubTitulo.setBounds(50, 430, 400, 60);
+        labelSubTitulo.setFont(new Font("Arial", Font.BOLD, 18));
+        labelSubTitulo.setForeground(Color.WHITE);
+        labelSubTitulo.setBounds(50, 400, 400, 60);
         panelIzq.add(labelSubTitulo);
 
-        decoPasapalabra = new JButton("Pasapalabra");
+        decoPasapalabra = new BotonRedondeado("Pasapalabra", 30);
         decoPasapalabra.setBounds(50, 520, 130, 40);
         decoPasapalabra.setEnabled(false);
         decoPasapalabra.setFocusable(false);
+        decoPasapalabra.setForeground(Color.WHITE);
         panelIzq.add(decoPasapalabra);
 
-        decoAhorcado = new JButton("Ahorcado");
+        decoAhorcado = new BotonRedondeado("Ahorcado", 30);
         decoAhorcado.setBounds(195, 520, 110, 40);
         decoAhorcado.setEnabled(false);
         decoAhorcado.setFocusable(false);
         panelIzq.add(decoAhorcado);
 
         cardLayoutDer = new CardLayout();
-        contenedorDer = new JPanel(cardLayoutDer);
+        contenedorDer = new PanelFondoAnimado("plataformajuegos/datos/giffondo/gifToystory.gif");
+        contenedorDer.setLayout(cardLayoutDer);
 
         JPanel vistaLogin = crearVistaLogin();
         JPanel vistaRegistro = crearVistaRegistro();
@@ -80,18 +92,22 @@ public class PanelLogin extends JPanel implements ActionListener{
         JPanel vistaLogin = new JPanel();
         vistaLogin.setLayout(null);
         vistaLogin.setBackground(Color.WHITE);
+        vistaLogin.setOpaque(false);
+
         JLabel labelTitulo = new JLabel("BIENVENIDO DE NUEVO");
         labelTitulo.setBounds(60, 160, 380, 20);
-        labelTitulo.setForeground(Color.PINK);
+        labelTitulo.setForeground(new Color(255, 0, 127));
         vistaLogin.add(labelTitulo);
 
         JLabel labelIniciarSesion = new JLabel("Iniciar Sesion");
-        labelIniciarSesion.setFont(labelIniciarSesion.getFont().deriveFont(Font.BOLD));
+        labelIniciarSesion.setFont(new Font("Arial", Font.BOLD, 32));
         labelIniciarSesion.setBounds(60, 190, 380, 40);
         vistaLogin.add(labelIniciarSesion);
 
         JLabel labelDescripcion = new JLabel("<html>Introduce tus credenciales para acceder a tus<br>partidas.</html>");
-        labelDescripcion.setBounds(60, 240, 380, 40);
+        labelDescripcion.setBounds(60, 240, 380, 50);
+        labelDescripcion.setFont(new Font("Arial", Font.BOLD, 14));
+        labelDescripcion.setForeground(Color.LIGHT_GRAY);
         vistaLogin.add(labelDescripcion);
 
         JLabel labelUsuario = new JLabel("USUARIO");
@@ -99,7 +115,7 @@ public class PanelLogin extends JPanel implements ActionListener{
         labelUsuario.setForeground(Color.GRAY);
         vistaLogin.add(labelUsuario);
 
-        textUsuarioLogin = new JTextField();
+        textUsuarioLogin = new TextFieldRedondeado(0, 15);
         textUsuarioLogin.setBounds(60, 340, 380, 45);
         vistaLogin.add(textUsuarioLogin);
 
@@ -108,12 +124,13 @@ public class PanelLogin extends JPanel implements ActionListener{
         labelContraseña.setForeground(Color.GRAY);
         vistaLogin.add(labelContraseña);
 
-        textContraseñaLogin = new JPasswordField();
+        textContraseñaLogin= new PasswordFieldRedondeado(0, 15);
         textContraseñaLogin.setBounds(60, 440, 380, 45);
         vistaLogin.add(textContraseñaLogin);
 
-        botonInicioSesion = new JButton("Iniciar Sesion");
+        botonInicioSesion = new BotonRedondeado("Iniciar Sesion", 20);
         botonInicioSesion.setBounds(60, 530, 380, 50);
+        botonInicioSesion.setBackground(new Color(227, 47, 114));
         vistaLogin.add(botonInicioSesion);
         botonInicioSesion.addActionListener(this);
 
@@ -153,18 +170,22 @@ public class PanelLogin extends JPanel implements ActionListener{
         JPanel vistaRegistro = new JPanel();
         vistaRegistro.setLayout(null);
         vistaRegistro.setBackground(Color.WHITE);
+
         JLabel labelTitulo = new JLabel("CREAR CUENTA");
         labelTitulo.setBounds(60, 90, 380, 20);
-        labelTitulo.setForeground(Color.PINK);
+        labelTitulo.setForeground(new Color(255, 0, 127));
         vistaRegistro.add(labelTitulo);
 
         JLabel labelCrearCuenta = new JLabel("Crear una cuenta");
-        labelCrearCuenta.setFont(labelCrearCuenta.getFont().deriveFont(Font.BOLD));
+        labelCrearCuenta.setFont(new Font("Arial", Font.BOLD, 32));
+        labelCrearCuenta.setForeground(Color.BLACK);
         labelCrearCuenta.setBounds(60, 120, 380, 40);
         vistaRegistro.add(labelCrearCuenta);
 
         JLabel labelDescripcion = new JLabel("<html>Elige un usuario y una contraseña para empezar a<br>jugar.</html>");
         labelDescripcion.setBounds(60, 170, 380, 40);
+        labelDescripcion.setFont(new Font("Arial", Font.BOLD, 14));
+        labelDescripcion.setForeground(Color.LIGHT_GRAY);
         vistaRegistro.add(labelDescripcion);
 
         JLabel labelUsuario = new JLabel("USUARIO");
@@ -172,7 +193,7 @@ public class PanelLogin extends JPanel implements ActionListener{
         labelUsuario.setForeground(Color.GRAY);
         vistaRegistro.add(labelUsuario);
 
-        textUsuarioRegistro = new JTextField();
+        textUsuarioRegistro = new TextFieldRedondeado(0, 20);
         textUsuarioRegistro.setBounds(60, 270, 380, 45);
         vistaRegistro.add(textUsuarioRegistro);
 
@@ -181,7 +202,7 @@ public class PanelLogin extends JPanel implements ActionListener{
         labelContraseña.setForeground(Color.GRAY);
         vistaRegistro.add(labelContraseña);
 
-        regPass1 = new JPasswordField();
+        regPass1 = new PasswordFieldRedondeado(0, 15);
         regPass1.setBounds(60, 370, 380, 45);
         vistaRegistro.add(regPass1);
 
@@ -190,12 +211,13 @@ public class PanelLogin extends JPanel implements ActionListener{
         labelContraseña2.setForeground(Color.GRAY);
         vistaRegistro.add(labelContraseña2);
 
-        regPass2 = new JPasswordField();
+        regPass2 = new PasswordFieldRedondeado(0, 15);
         regPass2.setBounds(60, 470, 380, 45);
         vistaRegistro.add(regPass2);
 
-        botonCrearCuenta = new JButton("Crear Cuenta");
+        botonCrearCuenta = new BotonRedondeado("Crear Cuenta", 15);
         botonCrearCuenta.setBounds(60, 560, 380, 50);
+        botonCrearCuenta.setBackground(new Color(227, 47, 114));
         vistaRegistro.add(botonCrearCuenta);
         botonCrearCuenta.addActionListener(this);
 

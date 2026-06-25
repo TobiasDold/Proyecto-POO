@@ -5,6 +5,8 @@ public class Usuario {
     private String password;
     private String rol;
 
+    public Usuario(){}
+
     public Usuario(String username, String password){
         this.username = username;
         this.password = password;
@@ -16,6 +18,10 @@ public class Usuario {
         this.password = password;
         this.rol = rol;
     }
+
+    public String getUsername() {return username;}
+
+    public String getRol(){return rol;}
 
     @Override
     public String toString(){

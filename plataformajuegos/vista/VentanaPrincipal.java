@@ -15,10 +15,10 @@ public class VentanaPrincipal extends JFrame {
         setSize(1000, 800);
         setLocationRelativeTo(null);
         setTitle("Proyecto POO");
+        setResizable(false);
         add(contenedor);
 
         agregarPanel(new PanelLogin(cp), "LOGIN");
-        agregarPanel(new PanelMenu(),"MENU");
 
         mostrarPanel("LOGIN");
     }
