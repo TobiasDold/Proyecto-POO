@@ -34,9 +34,9 @@ public class SistemaJuegos {
         }
 
         System.out.println("Se ha loggeado correctamente.");
-        if (partesUsuario[2].equals("ADMIN")){
+        if (partesUsuario[2].equals("ADMIN")) {
             return new Administrador(partesUsuario[0], partesUsuario[1]);
-        }else{
+        } else {
             return new Usuario(partesUsuario[0], partesUsuario[1]);
         }
     }

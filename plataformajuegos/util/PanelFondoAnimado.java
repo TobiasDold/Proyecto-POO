@@ -11,18 +11,6 @@ public class PanelFondoAnimado extends JPanel {
     public PanelFondoAnimado(String rutaImagen) {
         // Cargar la imagen usando Toolkit para que Java procese el GIF correctamente
         imagenFondo = Toolkit.getDefaultToolkit().createImage(rutaImagen);
-
-        // Configurar un Timer para que detenga el movimiento después de unos segundos
-        // Cambia 3000 (3 segundos) por la duración real de tu GIF
-        int duracionDeLaAnimacion = 3000;
-
-        Timer timer = new Timer(duracionDeLaAnimacion, e -> {
-            animacionActiva = false; // Al volverse false, detiene el bucle de repintado
-            repaint(); // Un último repintado para asegurar que quede estático en el último frame
-        });
-
-        timer.setRepeats(false); // IMPORTANTE: Para que el timer solo corra una vez
-        timer.start(); // Inicia la cuenta regresiva al crear el panel
     }
 
     @Override

@@ -11,17 +11,20 @@ public class ControladorPrincipal {
     private VentanaPrincipal ventana;
     private PanelMenu panelMenu;
 
-    public void iniciar(){
+    public void iniciar() {
         ventana = new VentanaPrincipal(this);
         ventana.setVisible(true);
     }
-    public boolean login(String username, String password){
+
+    public boolean login(String username, String password) {
         Usuario usuario = sj.login(username.trim(), password);
 
-        if(usuario == null){return false;}
+        if (usuario == null) {
+            return false;
+        }
 
         this.usuarioActual = usuario;
-        if(panelMenu == null){
+        if (panelMenu == null) {
             panelMenu = new PanelMenu(this);
             ventana.agregarPanel(panelMenu, "MENU");
         }
@@ -31,16 +34,28 @@ public class ControladorPrincipal {
 
         return true;
     }
-    public String registrar(String username, String regPass1, String regPass2){
-        if(!regPass1.equals(regPass2)) return "No coinciden";
-        
-        if(!sj.registrar(username.trim(), regPass1)){return "Usuario existente";}
+
+    public String registrar(String username, String regPass1, String regPass2) {
+        if (!regPass1.equals(regPass2))
+            return "No coinciden";
+
+        if (!sj.registrar(username.trim(), regPass1)) {
+            return "Usuario existente";
+        }
         return "Usuario creado";
     }
-    public void mostrarLogin(){
+
+    public void mostrarLogin() {
         ventana.mostrarPanel("LOGIN");
     }
 
-    public Usuario getUsuarioActual(){return usuarioActual;}
+    public Usuario getUsuarioActual() {
+        return usuarioActual;
+    }
+
+    public void logout() {
+        usuarioActual = null;
+        mostrarLogin();
+    }
 
 }

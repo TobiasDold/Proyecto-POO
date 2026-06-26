@@ -131,6 +131,7 @@ public class PanelLogin extends JPanel implements ActionListener{
         botonInicioSesion = new BotonRedondeado("Iniciar Sesion", 20);
         botonInicioSesion.setBounds(60, 530, 380, 50);
         botonInicioSesion.setBackground(new Color(227, 47, 114));
+        botonInicioSesion.setFocusPainted(false);
         vistaLogin.add(botonInicioSesion);
         botonInicioSesion.addActionListener(this);
 
@@ -170,6 +171,7 @@ public class PanelLogin extends JPanel implements ActionListener{
         JPanel vistaRegistro = new JPanel();
         vistaRegistro.setLayout(null);
         vistaRegistro.setBackground(Color.WHITE);
+        vistaRegistro.setOpaque(false);
 
         JLabel labelTitulo = new JLabel("CREAR CUENTA");
         labelTitulo.setBounds(60, 90, 380, 20);
@@ -218,6 +220,7 @@ public class PanelLogin extends JPanel implements ActionListener{
         botonCrearCuenta = new BotonRedondeado("Crear Cuenta", 15);
         botonCrearCuenta.setBounds(60, 560, 380, 50);
         botonCrearCuenta.setBackground(new Color(227, 47, 114));
+        botonCrearCuenta.setFocusPainted(false);
         vistaRegistro.add(botonCrearCuenta);
         botonCrearCuenta.addActionListener(this);
 
@@ -260,7 +263,8 @@ public class PanelLogin extends JPanel implements ActionListener{
             if(!cp.login(username, password)){
                 labelMensajeLogin.setText("Usuario o contraseña incorrectos.");
             }
-            
+            textUsuarioLogin.setText("");
+            textContraseñaLogin.setText("");
         }
         if(event.getSource() == botonCrearCuenta){
             String username = textUsuarioRegistro.getText();
