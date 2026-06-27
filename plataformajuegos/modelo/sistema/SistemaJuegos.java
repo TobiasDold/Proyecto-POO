@@ -1,5 +1,7 @@
 package plataformajuegos.modelo.sistema;
 
+import java.util.List;
+
 import plataformajuegos.controlador.*;
 import plataformajuegos.modelo.usuarios.*;
 
@@ -40,4 +42,8 @@ public class SistemaJuegos {
             return new Usuario(partesUsuario[0], partesUsuario[1], partesUsuario[2]);
         }
     }
+    
+    // List<RegistroPartida> obtenerEstadisticasJugador(String username){}
+    // List<RegistroPartida> obtenerEstadisticasJuego(String nombreJuego){}
+    // List<Usuario> obtenerTodosUsuarios(){}
 }

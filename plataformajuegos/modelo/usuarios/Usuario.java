@@ -24,21 +24,16 @@ public class Usuario {
         return username;
     }
 
+    public String getPassword(){
+        return password;
+    }
+
     public String getRol() {
         return rol;
     }
 
     public void setRol(String rol) {
         this.rol = rol;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setPassword(String password) {
-        if (password.equals(this.password))
-            this.password = password;
     }
 
     @Override

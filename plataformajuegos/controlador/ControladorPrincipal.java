@@ -1,5 +1,6 @@
 package plataformajuegos.controlador;
 
+import plataformajuegos.modelo.juegos.*;
 import plataformajuegos.modelo.sistema.SistemaJuegos;
 import plataformajuegos.modelo.usuarios.*;
 import plataformajuegos.vista.PanelMenu;
@@ -49,13 +50,19 @@ public class ControladorPrincipal {
         ventana.mostrarPanel("LOGIN");
     }
 
-    public Usuario getUsuarioActual() {
-        return usuarioActual;
-    }
-
     public void logout() {
         usuarioActual = null;
         mostrarLogin();
+    }
+
+    public void iniciarPartida(Juego nombreJuego) {
+    }
+
+    public void mostrarEstadisticas() {
+    }
+
+    public Usuario getUsuarioActual() {
+        return usuarioActual;
     }
 
 }

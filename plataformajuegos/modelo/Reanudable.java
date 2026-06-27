@@ -2,6 +2,7 @@ package plataformajuegos.modelo;
 
 import java.io.*;
 
-public class Reanudable implements Serializable{
-    
+public interface Reanudable{
+    public String serializarEstado();
+    public void deserializarEstado(String estado);
 }
