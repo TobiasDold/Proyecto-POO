@@ -98,6 +98,7 @@ public abstract class Juego {
 
     @Override
     public String toString() {
-        return nombre;
+        String reglasPorComas = String.join(", ", reglas);
+        return id+"|"+nombre+"|"+descripcion+"|"+reglasPorComas+"|"+activo;
     }
 }

@@ -85,10 +85,28 @@ public class ControladorFicheros {
 
     // ===SECCION PARTIDAS===\\
     public void registrarPartida(Partida partida) {
+        try (PrintWriter pw = new PrintWriter(new FileWriter("plataformajuegos/datos/historial.txt", true))) {
+            pw.println(partida.toString());
+            pw.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public List<Partida> cargarPartidas() {
         List<Partida> partida = new ArrayList<>();
+        String linea;
+        try (BufferedReader br = new BufferedReader(new FileReader("plataformajuegos/datos/historial.txt"))) {
+            while ((linea = br.readLine()) != null) {
+                String[] partesPartidas = linea.split("\\|");
+                if (partesPartidas.length == 3) {
+                        Partida nuevaPartida = new Partida(partesPartidas[0], partesPartidas[1]);
+                        partida.add(partesPartidas);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return partida;
     }
 
