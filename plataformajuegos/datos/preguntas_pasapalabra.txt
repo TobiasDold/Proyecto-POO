@@ -1,27 +1,27 @@
-A|EMPIEZA|Accion de desplazarse por el aire utilizando alas o un aparato.|VOLAR
-B|EMPIEZA|Mamifero marino de gran tamaño que vive en los oceanos.|BALLENA
-C|EMPIEZA|Instrumento para medir el tiempo y conocer la hora.|CRONOMETRO
-D|CONTIENE|Conjunto de datos almacenados y organizados para su consulta.|BASE DE DATOS
-E|EMPIEZA|Fenomeno por el cual una especie desaparece por completo.|EXTINCION
-F|CONTIENE|Combustible gaseoso utilizado para cocinar o calentar.|GAS
-G|EMPIEZA|Deporte que se practica golpeando una pelota con palos.|GOLF
-H|EMPIEZA|Gas mas abundante del universo y el primero de la tabla periodica.|HIDROGENO
-I|EMPIEZA|Territorio rodeado completamente por agua.|ISLA
-J|EMPIEZA|Prenda que cubre el torso y los brazos.|JERSEY
-K|CONTIENE|Fruto tropical de pulpa verde y sabor ligeramente acido.|KIWI
-L|EMPIEZA|Astro que ilumina la Tierra durante la noche.|LUNA
-M|EMPIEZA|Dispositivo que permite observar objetos muy pequeños.|MICROSCOPIO
-N|EMPIEZA|Relato extenso escrito en prosa.|NOVELA
-Ñ|CONTIENE|Mamifero africano parecido al toro.|ÑU
-O|EMPIEZA|Elemento quimico esencial para la respiracion.|OXIGENO
-P|EMPIEZA|Documento que permite viajar entre paises.|PASAPORTE
-Q|EMPIEZA|Ciencia que estudia la composicion y propiedades de la materia.|QUIMICA
-R|CONTIENE|Fenomeno meteorologico con gotas de agua que caen de las nubes.|LLUVIA
-S|EMPIEZA|Sistema formado por una estrella y los cuerpos que giran a su alrededor.|SISTEMA SOLAR
-T|EMPIEZA|Vehiculo ferroviario compuesto por varios vagones.|TREN
-U|EMPIEZA|Magnitud estandar utilizada para medir.|UNIDAD
-V|EMPIEZA|Abertura que permite la entrada de luz y aire en una habitacion.|VENTANA
-W|EMPIEZA|Sistema de comunicacion inalambrica para redes locales.|WIFI
-X|EMPIEZA|Instrumento musical de percusion con laminas afinadas.|XILOFONO
-Y|CONTIENE|Planta leguminosa utilizada en muchos alimentos.|SOYA
-Z|EMPIEZA|Verdura naranja con forma conica.|ZANAHORIA
+A|EMPIEZA|Vehículo volador con alas y motores que transporta pasajeros.|AVIÓN
+B|EMPIEZA|Mamífero marino de gran tamaño que vive en los océanos.|BALLENA
+C|EMPIEZA|Instrumento para medir el tiempo y conocer la hora.|CRONÓMETRO
+D|EMPIEZA|Pieza dura que se encuentra en la boca y sirve para masticar.|DIENTE
+E|EMPIEZA|Fenómeno por el cual una especie biológica desaparece por completo.|EXTINCIÓN
+F|EMPIEZA|Torre alta con una luz potente en la costa para guiar a los barcos por la noche.|FARO
+G|EMPIEZA|Deporte que se practica golpeando una pequeña pelota con palos especiales.|GOLF
+H|EMPIEZA|Gas más abundante del universo y el primero de la tabla periódica.|HIDRÓGENO
+I|EMPIEZA|Porción de tierra rodeada completamente por agua.|ISLA
+J|EMPIEZA|Prenda de vestir de lana o punto que cubre el torso y los brazos.|JERSEY
+K|EMPIEZA|Fruto tropical de piel vellosa, pulpa verde y sabor ligeramente ácido.|KIWI
+L|EMPIEZA|Astro que ilumina la Tierra durante la noche reflejando la luz solar.|LUNA
+M|EMPIEZA|Dispositivo óptico que permite observar objetos extremadamente pequeños.|MICROSCOPIO
+N|EMPIEZA|Relato extenso escrito en prosa que cuenta una historia.|NOVELA
+Ñ|EMPIEZA|Ave corredora de gran tamaño, similar al avestruz, que vive en América del Sur.|ÑANDÚ
+O|EMPIEZA|Elemento químico gaseoso esencial para la respiración.|OXÍGENO
+P|EMPIEZA|Documento oficial necesario para viajar de forma legal entre diferentes países.|PASAPORTE
+Q|EMPIEZA|Ciencia que estudia la composición, estructura y propiedades de la materia.|QUÍMICA
+R|EMPIEZA|Línea de luz que procede de un cuerpo luminoso como el Sol.|RAYO
+S|EMPIEZA|Sistema formado por el Sol y los cuerpos celestes que giran a su alrededor.|SISTEMA SOLAR
+T|EMPIEZA|Vehículo ferroviario compuesto por una locomotora y varios vagones.|TREN
+U|EMPIEZA|Cantidad estándar o magnitud de referencia que se utiliza para medir.|UNIDAD
+V|EMPIEZA|Abertura en la pared que sirve para dar luz y ventilación a una habitación.|VENTANA
+W|EMPIEZA|Sistema de conexión inalámbrica que permite conectar dispositivos a internet.|WIFI
+X|EMPIEZA|Instrumento musical de percusión con láminas afinadas de madera o metal.|XILÓFONO
+Y|EMPIEZA|Parte central, redonda y de color amarillo del huevo.|YEMA
+Z|EMPIEZA|Hortaliza de color naranja, forma cónica y raíz comestible.|ZANAHORIA
