@@ -2,22 +2,14 @@ package plataformajuegos.modelo.juegos;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
+import java.nio.file.*;
+import java.util.*;
 
 import plataformajuegos.util.Normalizador;
 
 public class Ahorcado extends Juego {
     private static final int INTENTOS_INICIALES = 6;
-    private static final Path RUTA_PALABRAS =
-            Paths.get("plataformajuegos", "datos", "palabras_ahorcado.txt");
+    private static final Path RUTA_PALABRAS = Paths.get("plataformajuegos", "datos", "palabras_ahorcado.txt");
 
     private String palabraSecreta;
     private StringBuilder palabraActual;

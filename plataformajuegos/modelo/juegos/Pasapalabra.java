@@ -2,23 +2,15 @@ package plataformajuegos.modelo.juegos;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.nio.file.*;
+import java.util.*;
 
 import plataformajuegos.util.Normalizador;
 
 public class Pasapalabra extends Juego {
-    private static final Path RUTA_PREGUNTAS =
-            Paths.get("plataformajuegos", "datos", "preguntas_pasapalabra.txt");
-    private static final Path RUTA_PREGUNTAS_ANTIGUA =
-            Paths.get("plataformajuegos", "datos", "preguntas_pasaplabras.txt");
+    private static final Path RUTA_PREGUNTAS = Paths.get("plataformajuegos", "datos", "preguntas_pasapalabra.txt");
+    private static final Path RUTA_PREGUNTAS_ANTIGUA = Paths.get("plataformajuegos", "datos",
+            "preguntas_pasaplabras.txt");
 
     private final List<Pregunta> preguntas;
     private int indiceActual;

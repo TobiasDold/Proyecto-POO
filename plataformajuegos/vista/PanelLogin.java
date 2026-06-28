@@ -8,7 +8,7 @@ import javax.swing.*;
 import plataformajuegos.controlador.ControladorPrincipal;
 import plataformajuegos.util.*;
 
-public class PanelLogin extends JPanel implements ActionListener{
+public class PanelLogin extends JPanel implements ActionListener {
 
     private PanelFondoAnimado contenedorDer;
     private CardLayout cardLayoutDer;
@@ -25,9 +25,9 @@ public class PanelLogin extends JPanel implements ActionListener{
     private JPasswordField regPass1;
     private JPasswordField regPass2;
     private ControladorPrincipal cp;
-    
-    public PanelLogin(ControladorPrincipal cp){
-        this.cp=cp;
+
+    public PanelLogin(ControladorPrincipal cp) {
+        this.cp = cp;
 
         this.setLayout(new GridLayout(1, 2));
 
@@ -88,7 +88,7 @@ public class PanelLogin extends JPanel implements ActionListener{
         this.add(contenedorDer);
     }
 
-    public JPanel crearVistaLogin(){
+    public JPanel crearVistaLogin() {
         JPanel vistaLogin = new JPanel();
         vistaLogin.setLayout(null);
         vistaLogin.setBackground(Color.WHITE);
@@ -124,7 +124,7 @@ public class PanelLogin extends JPanel implements ActionListener{
         labelContraseña.setForeground(Color.GRAY);
         vistaLogin.add(labelContraseña);
 
-        textContraseñaLogin= new PasswordFieldRedondeado(0, 15);
+        textContraseñaLogin = new PasswordFieldRedondeado(0, 15);
         textContraseñaLogin.setBounds(60, 440, 380, 45);
         vistaLogin.add(textContraseñaLogin);
 
@@ -140,7 +140,6 @@ public class PanelLogin extends JPanel implements ActionListener{
         labelMensajeLogin.setForeground(Color.RED);
         vistaLogin.add(labelMensajeLogin);
 
-
         JLabel labelSinCuenta = new JLabel("¿No tienes cuenta? ");
         labelSinCuenta.setForeground(Color.GRAY);
         labelSinCuenta.setBounds(140, 650, 130, 30);
@@ -154,12 +153,12 @@ public class PanelLogin extends JPanel implements ActionListener{
         labelRegistrate.setHorizontalAlignment(SwingConstants.LEFT);
         vistaLogin.add(labelRegistrate);
 
-        //Hago que el cursor se ponga como una manito
+        // Hago que el cursor se ponga como una manito
         labelRegistrate.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        //Le añado la accion del clic solo a la palabra "Registrate"
-        labelRegistrate.addMouseListener(new MouseAdapter(){
+        // Le añado la accion del clic solo a la palabra "Registrate"
+        labelRegistrate.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent event){
+            public void mouseClicked(MouseEvent event) {
                 cardLayoutDer.show(contenedorDer, "VistaRegistro");
             }
         });
@@ -167,7 +166,8 @@ public class PanelLogin extends JPanel implements ActionListener{
 
         return vistaLogin;
     }
-    public JPanel crearVistaRegistro(){
+
+    public JPanel crearVistaRegistro() {
         JPanel vistaRegistro = new JPanel();
         vistaRegistro.setLayout(null);
         vistaRegistro.setBackground(Color.WHITE);
@@ -242,12 +242,12 @@ public class PanelLogin extends JPanel implements ActionListener{
         labelIniciaSesion.setHorizontalAlignment(SwingConstants.LEFT);
         vistaRegistro.add(labelIniciaSesion);
 
-        //Hago que el cursor se ponga como una manito
+        // Hago que el cursor se ponga como una manito
         labelIniciaSesion.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        //Le añado la accion del clic solo a la palabra "Registrate"
-        labelIniciaSesion.addMouseListener(new MouseAdapter(){
+        // Le añado la accion del clic solo a la palabra "Registrate"
+        labelIniciaSesion.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent event){
+            public void mouseClicked(MouseEvent event) {
                 cardLayoutDer.show(contenedorDer, "VistaLogin");
             }
         });
@@ -256,25 +256,25 @@ public class PanelLogin extends JPanel implements ActionListener{
         return vistaRegistro;
     }
 
-    public void actionPerformed(ActionEvent event){
-        if(event.getSource() == botonInicioSesion){
+    public void actionPerformed(ActionEvent event) {
+        if (event.getSource() == botonInicioSesion) {
             String username = textUsuarioLogin.getText();
             String password = new String(textContraseñaLogin.getPassword());
-            if(!cp.login(username, password)){
+            if (!cp.login(username, password)) {
                 labelMensajeLogin.setText("Usuario o contraseña incorrectos.");
             }
             textUsuarioLogin.setText("");
             textContraseñaLogin.setText("");
         }
-        if(event.getSource() == botonCrearCuenta){
+        if (event.getSource() == botonCrearCuenta) {
             String username = textUsuarioRegistro.getText();
             String regPass1 = new String(this.regPass1.getPassword());
             String regPass2 = new String(this.regPass2.getPassword());
             String usuario = cp.registrar(username, regPass1, regPass2);
-            if(usuario.equals("No coinciden")){
+            if (usuario.equals("No coinciden")) {
                 labelMensajeRegistro.setText("Las contraseñas no coinciden.");
             }
-            if(usuario.equals("Usuario existente")){
+            if (usuario.equals("Usuario existente")) {
                 labelMensajeRegistro.setText("El usuario ya existe.");
             }
         }

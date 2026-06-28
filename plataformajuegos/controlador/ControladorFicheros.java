@@ -2,32 +2,18 @@ package plataformajuegos.controlador;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
+import java.nio.file.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import plataformajuegos.modelo.partidas.Puntuacion;
-import plataformajuegos.modelo.usuarios.Administrador;
-import plataformajuegos.modelo.usuarios.Jugador;
-import plataformajuegos.modelo.usuarios.RegistroPartida;
-import plataformajuegos.modelo.usuarios.Usuario;
+import plataformajuegos.modelo.usuarios.*;
 
 public class ControladorFicheros {
-    private static final Path DIRECTORIO_DATOS =
-            Paths.get("plataformajuegos", "datos");
+    private static final Path DIRECTORIO_DATOS = Paths.get("plataformajuegos", "datos");
     private static final Path RUTA_USUARIOS = DIRECTORIO_DATOS.resolve("usuarios.txt");
     private static final Path RUTA_HISTORIAL = DIRECTORIO_DATOS.resolve("historial.txt");
-    private static final Path RUTA_GUARDADAS =
-            DIRECTORIO_DATOS.resolve("partidasGuardadas.txt");
+    private static final Path RUTA_GUARDADAS = DIRECTORIO_DATOS.resolve("partidasGuardadas.txt");
 
     public ControladorFicheros() {
         asegurarFicheros();
@@ -230,7 +216,7 @@ public class ControladorFicheros {
         if ("ADMIN".equalsIgnoreCase(rol.trim())) {
             return new Administrador(username, password);
         }
-        return new Jugador(username, password);
+        return new Usuario(username, password);
     }
 
     private void asegurarFicheros() {

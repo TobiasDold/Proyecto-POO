@@ -1,33 +1,18 @@
 package plataformajuegos.controlador;
 
 import java.awt.GridLayout;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
+import javax.swing.*;
 
-import plataformajuegos.modelo.juegos.Ahorcado;
-import plataformajuegos.modelo.juegos.Juego;
-import plataformajuegos.modelo.juegos.Pasapalabra;
+import plataformajuegos.modelo.juegos.*;
 import plataformajuegos.modelo.sistema.SistemaJuegos;
-import plataformajuegos.modelo.usuarios.Administrador;
-import plataformajuegos.modelo.usuarios.Jugador;
-import plataformajuegos.modelo.usuarios.Usuario;
-import plataformajuegos.vista.PanelAdmin;
-import plataformajuegos.vista.PanelAhorcado;
-import plataformajuegos.vista.PanelEstadisticas;
-import plataformajuegos.vista.PanelMenu;
-import plataformajuegos.vista.PanelPasapalabra;
-import plataformajuegos.vista.VentanaPrincipal;
+import plataformajuegos.modelo.usuarios.*;
+import plataformajuegos.vista.*;
 
 public class ControladorPrincipal {
     private final SistemaJuegos sistemaJuegos = new SistemaJuegos();
-    private final ControladorFicheros controladorFicheros =
-            sistemaJuegos.getControladorFicheros();
+    private final ControladorFicheros controladorFicheros = sistemaJuegos.getControladorFicheros();
     private Usuario usuarioActual;
     private VentanaPrincipal ventana;
     private PanelMenu panelMenu;
@@ -73,7 +58,7 @@ public class ControladorPrincipal {
         boolean reanudar = false;
         if (controladorFicheros.tieneEstadoGuardado(
                 usuarioActual.getUsername(), nombreJuego)) {
-            Object[] opciones = {"Continuar", "Nueva partida", "Cancelar"};
+            Object[] opciones = { "Continuar", "Nueva partida", "Cancelar" };
             int opcion = JOptionPane.showOptionDialog(ventana,
                     "Hay una partida guardada de " + nombreJuego + ".",
                     "Partida guardada", JOptionPane.DEFAULT_OPTION,
@@ -201,7 +186,7 @@ public class ControladorPrincipal {
                     "No se pudo añadir", JOptionPane.WARNING_MESSAGE);
             return null;
         }
-        return segundo instanceof Jugador ? segundo
-                : new Jugador(segundo.getUsername(), segundo.getPassword());
+        return segundo instanceof Usuario ? segundo
+                : new Usuario(segundo.getUsername(), segundo.getPassword());
     }
 }

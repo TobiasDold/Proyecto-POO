@@ -5,8 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 public class FechaUtil {
-    private static final DateTimeFormatter FORMATO_VISUAL =
-            DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+    private static final DateTimeFormatter FORMATO_VISUAL = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
     private FechaUtil() {
     }

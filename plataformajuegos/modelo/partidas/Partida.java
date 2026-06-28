@@ -2,17 +2,11 @@ package plataformajuegos.modelo.partidas;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import plataformajuegos.modelo.Reanudable;
 import plataformajuegos.modelo.juegos.Juego;
-import plataformajuegos.modelo.usuarios.Jugador;
-import plataformajuegos.modelo.usuarios.Usuario;
+import plataformajuegos.modelo.usuarios.*;
 
 public abstract class Partida implements Reanudable {
     protected Juego juego;
@@ -153,7 +147,7 @@ public abstract class Partida implements Reanudable {
         for (String jugadorSerializado : partes[3].split(",")) {
             String[] datos = jugadorSerializado.split(":", 2);
             if (datos.length == 2) {
-                jugadores.add(new Jugador(datos[0], ""));
+                jugadores.add(new Usuario(datos[0], ""));
                 puntuaciones.put(datos[0], Integer.parseInt(datos[1]));
             }
         }

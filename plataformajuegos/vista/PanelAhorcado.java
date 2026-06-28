@@ -1,25 +1,12 @@
 package plataformajuegos.vista;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Map;
-import java.util.TreeSet;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 
-import plataformajuegos.controlador.ControladorJuego;
-import plataformajuegos.controlador.ControladorPrincipal;
+import plataformajuegos.controlador.*;
 import plataformajuegos.modelo.juegos.Ahorcado;
 
 public class PanelAhorcado extends JPanel {

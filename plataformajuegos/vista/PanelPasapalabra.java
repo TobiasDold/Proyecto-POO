@@ -1,26 +1,13 @@
 package plataformajuegos.vista;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.*;
+import java.awt.event.*;
 import java.util.Map;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 
-import plataformajuegos.controlador.ControladorJuego;
-import plataformajuegos.controlador.ControladorPrincipal;
-import plataformajuegos.modelo.juegos.Pasapalabra;
-import plataformajuegos.modelo.juegos.Pregunta;
+import plataformajuegos.controlador.*;
+import plataformajuegos.modelo.juegos.*;
 
 public class PanelPasapalabra extends JPanel {
     private final ControladorPrincipal controladorPrincipal;

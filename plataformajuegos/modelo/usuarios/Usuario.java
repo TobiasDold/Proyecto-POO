@@ -24,7 +24,7 @@ public class Usuario {
         return username;
     }
 
-    public String getPassword(){
+    public String getPassword() {
         return password;
     }
 

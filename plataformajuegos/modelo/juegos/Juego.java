@@ -29,9 +29,13 @@ public abstract class Juego implements Reanudable {
     }
 
     public abstract void iniciar();
+
     public abstract void procesarJugada(String input);
+
     public abstract boolean esFinalizado();
+
     public abstract int obtenerPuntuacion();
+
     public abstract String obtenerEstadoVisual();
 
     public String getNombreJuego() {

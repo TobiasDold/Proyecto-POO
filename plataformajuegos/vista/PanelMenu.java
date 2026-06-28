@@ -6,8 +6,7 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import plataformajuegos.controlador.ControladorPrincipal;
-import plataformajuegos.modelo.usuarios.Administrador;
-import plataformajuegos.modelo.usuarios.Usuario;
+import plataformajuegos.modelo.usuarios.*;
 import plataformajuegos.util.*;
 
 public class PanelMenu extends JPanel implements ActionListener {

@@ -1,18 +1,10 @@
 package plataformajuegos.controlador;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
-import plataformajuegos.modelo.juegos.Ahorcado;
-import plataformajuegos.modelo.juegos.Juego;
-import plataformajuegos.modelo.juegos.Pasapalabra;
-import plataformajuegos.modelo.partidas.EstadoPartida;
-import plataformajuegos.modelo.partidas.Partida;
-import plataformajuegos.modelo.partidas.PartidaAhorcado;
-import plataformajuegos.modelo.partidas.PartidaPasapalabra;
-import plataformajuegos.modelo.usuarios.RegistroPartida;
-import plataformajuegos.modelo.usuarios.Usuario;
+import plataformajuegos.modelo.juegos.*;
+import plataformajuegos.modelo.partidas.*;
+import plataformajuegos.modelo.usuarios.*;
 
 public class ControladorJuego {
     private final List<Usuario> jugadores;
@@ -38,7 +30,8 @@ public class ControladorJuego {
         this.jugadores = new ArrayList<>(jugadores);
         this.controladorPrincipal = controladorPrincipal;
         this.controladorFicheros = controladorFicheros == null
-                ? new ControladorFicheros() : controladorFicheros;
+                ? new ControladorFicheros()
+                : controladorFicheros;
         this.juego = crearJuego(nombreJuego);
         this.partida = crearPartida(this.jugadores, juego);
         this.partida.iniciar();

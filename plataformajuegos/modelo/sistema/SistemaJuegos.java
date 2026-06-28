@@ -4,9 +4,7 @@ import java.util.List;
 
 import plataformajuegos.controlador.ControladorFicheros;
 import plataformajuegos.modelo.partidas.Puntuacion;
-import plataformajuegos.modelo.usuarios.Jugador;
-import plataformajuegos.modelo.usuarios.RegistroPartida;
-import plataformajuegos.modelo.usuarios.Usuario;
+import plataformajuegos.modelo.usuarios.*;
 
 public class SistemaJuegos {
     private final ControladorFicheros controladorFicheros;
@@ -25,7 +23,7 @@ public class SistemaJuegos {
                 || controladorFicheros.existeUsuario(nombre)) {
             return false;
         }
-        controladorFicheros.guardarUsuarios(new Jugador(nombre, password));
+        controladorFicheros.guardarUsuarios(new Usuario(nombre, password));
         return true;
     }
 

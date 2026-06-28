@@ -1,27 +1,15 @@
 package plataformajuegos.vista;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.*;
+import java.awt.event.*;
 import java.util.List;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
-import javax.swing.JTable;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
-import plataformajuegos.controlador.ControladorFicheros;
-import plataformajuegos.controlador.ControladorPrincipal;
+import plataformajuegos.controlador.*;
 import plataformajuegos.modelo.partidas.Puntuacion;
-import plataformajuegos.modelo.usuarios.RegistroPartida;
-import plataformajuegos.modelo.usuarios.Usuario;
+import plataformajuegos.modelo.usuarios.*;
 import plataformajuegos.util.FechaUtil;
 
 public class PanelAdmin extends JPanel {
@@ -71,7 +59,7 @@ public class PanelAdmin extends JPanel {
         panel.add(titulo, BorderLayout.NORTH);
 
         DefaultTableModel modelo = modeloNoEditable(
-                new Object[] {"Posicion", "Jugador", "Mejor puntuacion"});
+                new Object[] { "Posicion", "Jugador", "Mejor puntuacion" });
         for (int i = 0; i < puntuaciones.size(); i++) {
             Puntuacion puntuacion = puntuaciones.get(i);
             modelo.addRow(new Object[] {
@@ -87,8 +75,7 @@ public class PanelAdmin extends JPanel {
                 "Usuario", "Rol", "Ultimo juego", "Fecha", "Puntuacion"
         });
         for (Usuario usuario : controladorFicheros.cargarUsuarios()) {
-            List<RegistroPartida> partidas =
-                    controladorFicheros.cargarPartidasDe(usuario.getUsername());
+            List<RegistroPartida> partidas = controladorFicheros.cargarPartidasDe(usuario.getUsername());
             RegistroPartida ultima = partidas.isEmpty() ? null : partidas.get(0);
             modelo.addRow(new Object[] {
                     usuario.getUsername(),
