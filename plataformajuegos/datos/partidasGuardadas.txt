@@ -1,0 +1,1 @@
+# Estados de partidas pausadas. El programa gestiona este fichero automaticamente.

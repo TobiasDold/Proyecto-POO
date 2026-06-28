@@ -1,15 +1,22 @@
 package plataformajuegos.util;
 
-public class Normalizador {
+import java.text.Normalizer;
+import java.util.Locale;
 
-    public static String normalizar(String texto) {
-        return null;
+public class Normalizador {
+    private Normalizador() {
     }
 
-    public boolean sonIguales(String respuesta1, String respuesta2) {
-        if (respuesta1.equals(respuesta2)) {
-            return true;
-        } else
-            return false;
+    public static String normalizar(String texto) {
+        if (texto == null) {
+            return "";
+        }
+        String sinAcentos = Normalizer.normalize(texto.trim(), Normalizer.Form.NFD)
+                .replaceAll("\\p{M}+", "");
+        return sinAcentos.toUpperCase(Locale.ROOT).replaceAll("\\s+", " ");
+    }
+
+    public static boolean sonIguales(String respuesta1, String respuesta2) {
+        return normalizar(respuesta1).equals(normalizar(respuesta2));
     }
 }

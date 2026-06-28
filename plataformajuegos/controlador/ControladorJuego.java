@@ -1,95 +1,154 @@
 package plataformajuegos.controlador;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
-import plataformajuegos.modelo.juegos.*;
-import plataformajuegos.modelo.partidas.*;
-import plataformajuegos.modelo.usuarios.*;
+import plataformajuegos.modelo.juegos.Ahorcado;
+import plataformajuegos.modelo.juegos.Juego;
+import plataformajuegos.modelo.juegos.Pasapalabra;
+import plataformajuegos.modelo.partidas.EstadoPartida;
+import plataformajuegos.modelo.partidas.Partida;
+import plataformajuegos.modelo.partidas.PartidaAhorcado;
+import plataformajuegos.modelo.partidas.PartidaPasapalabra;
+import plataformajuegos.modelo.usuarios.RegistroPartida;
+import plataformajuegos.modelo.usuarios.Usuario;
 
 public class ControladorJuego {
-    private Usuario jugador;
+    private final List<Usuario> jugadores;
     private Juego juego;
-    private ControladorPrincipal cp;
+    private final ControladorPrincipal controladorPrincipal;
     private Partida partida;
-    private ControladorFicheros cf;
+    private final ControladorFicheros controladorFicheros;
+    private boolean resultadoRegistrado;
 
-    public ControladorJuego(Usuario jugador, String nombreJuego, ControladorPrincipal cp, ControladorFicheros cf) {
-        this.jugador = jugador;
-        this.cp = cp;
-        this.cf = cf;
+    public ControladorJuego(Usuario jugador, String nombreJuego,
+            ControladorPrincipal controladorPrincipal,
+            ControladorFicheros controladorFicheros) {
+        this(Collections.singletonList(jugador), nombreJuego,
+                controladorPrincipal, controladorFicheros);
+    }
 
-        if (nombreJuego.equals("Ahorcado")) {
-            this.juego = new Ahorcado();
-            partida = new PartidaAhorcado(jugador, this.juego);
-        } else if (nombreJuego.equals("Pasapalabra")) {
-            this.juego = new Pasapalabra();
-            partida = new PartidaPasapalabra(jugador, this.juego);
-        } else {
-            return;
+    public ControladorJuego(List<Usuario> jugadores, String nombreJuego,
+            ControladorPrincipal controladorPrincipal,
+            ControladorFicheros controladorFicheros) {
+        if (jugadores == null || jugadores.isEmpty()) {
+            throw new IllegalArgumentException("Se necesita al menos un jugador.");
         }
-
-        partida.iniciar();
-        cp.iniciarPartida(this.juego);
+        this.jugadores = new ArrayList<>(jugadores);
+        this.controladorPrincipal = controladorPrincipal;
+        this.controladorFicheros = controladorFicheros == null
+                ? new ControladorFicheros() : controladorFicheros;
+        this.juego = crearJuego(nombreJuego);
+        this.partida = crearPartida(this.jugadores, juego);
+        this.partida.iniciar();
+        this.resultadoRegistrado = false;
     }
 
     public void procesarJugada(String input) {
+        if (partida.getEstado() != EstadoPartida.EN_CURSO || juego.esFinalizado()) {
+            return;
+        }
+
+        int puntuacionAnterior = juego.obtenerPuntuacion();
         juego.procesarJugada(input);
+        int diferencia = juego.obtenerPuntuacion() - puntuacionAnterior;
+        partida.registrarPuntuacionTurno(diferencia);
 
         if (juego.esFinalizado()) {
-            partida.setPuntuacionFinal(juego.obtenerPuntuacion());
-            String username = jugador.getUsername();
-            String juegoJugado = juego.getNombreJuego();
-            terminarPartida(username, juegoJugado);
+            terminarPartida();
+        } else {
+            partida.avanzarTurno();
         }
     }
 
     public void pausarPartida() {
-        if (partida.getEstado() != EstadoPartida.PAUSADA) {
+        if (partida.getEstado() == EstadoPartida.EN_CURSO) {
             partida.pausar();
-            String estadoSerializado = partida.serializarEstado();
-            cf.guardarEstado(jugador.getUsername(), juego.getNombreJuego(), estadoSerializado);
+            controladorFicheros.guardarEstado(getJugadorPrincipal().getUsername(),
+                    juego.getNombreJuego(), partida.serializarEstado());
         }
     }
 
-    public void reanudarPartida(String username, String nombreJuego) {
-        String estado = cf.cargarEstado(username, nombreJuego);
-
-        if (estado == null) {
-            return;
-        }
-
-        if (nombreJuego.equals("Ahorcado")) {
-            this.juego = new Ahorcado();
-            partida = new PartidaAhorcado(jugador, this.juego);
-        } else if (nombreJuego.equals("Pasapalabra")) {
-            this.juego = new Pasapalabra();
-            partida = new PartidaPasapalabra(jugador, this.juego);
-        } else {
-            return;
-        }
-
-        partida.deserializarEstado(estado);
-        partida.setEstado(EstadoPartida.EN_CURSO);
+    public boolean reanudarPartida() {
+        return reanudarPartida(getJugadorPrincipal().getUsername(),
+                juego.getNombreJuego());
     }
 
-    public void terminarPartida(String username, String juego) {
-        int puntuacion = obtenerPuntuacionActual();
+    public boolean reanudarPartida(String username, String nombreJuego) {
+        String estadoGuardado = controladorFicheros.cargarEstado(username, nombreJuego);
+        if (estadoGuardado == null) {
+            return false;
+        }
 
-        RegistroPartida registro = new RegistroPartida(username, juego, (partida.getFechaInicio()), puntuacion);
+        juego = crearJuego(nombreJuego);
+        partida = crearPartida(jugadores, juego);
+        try {
+            partida.deserializarEstado(estadoGuardado);
+            partida.reanudar();
+            resultadoRegistrado = false;
+            return true;
+        } catch (RuntimeException e) {
+            return false;
+        }
+    }
 
-        cf.registrarPartida(registro);
-
-        cf.eliminarGuardada(username, juego);
-
+    public void terminarPartida() {
+        if (resultadoRegistrado) {
+            return;
+        }
+        for (Usuario jugador : partida.getJugadores()) {
+            RegistroPartida registro = new RegistroPartida(
+                    jugador.getUsername(),
+                    juego.getNombreJuego(),
+                    partida.getFechaInicio(),
+                    partida.getPuntuacionDe(jugador.getUsername()));
+            controladorFicheros.registrarPartida(registro);
+        }
+        controladorFicheros.eliminarGuardada(getJugadorPrincipal().getUsername(),
+                juego.getNombreJuego());
         partida.setEstado(EstadoPartida.TERMINADA);
+        resultadoRegistrado = true;
     }
 
     public int obtenerPuntuacionActual() {
-        return partida.getPuntuacionFinal();
+        return partida.getPuntuacionDe(partida.getJugadorActual().getUsername());
     }
 
     public String obtenerEstadoJuego() {
-        return partida.obtenerEstadoVisual(); // Solo desde Partida
+        return partida.obtenerEstadoVisual();
+    }
+
+    public Usuario getJugadorPrincipal() {
+        return jugadores.get(0);
+    }
+
+    public Juego getJuego() {
+        return juego;
+    }
+
+    public Partida getPartida() {
+        return partida;
+    }
+
+    public ControladorPrincipal getControladorPrincipal() {
+        return controladorPrincipal;
+    }
+
+    private Juego crearJuego(String nombreJuego) {
+        if ("Ahorcado".equalsIgnoreCase(nombreJuego)) {
+            return new Ahorcado();
+        }
+        if ("Pasapalabra".equalsIgnoreCase(nombreJuego)) {
+            return new Pasapalabra();
+        }
+        throw new IllegalArgumentException("Juego no soportado: " + nombreJuego);
+    }
+
+    private Partida crearPartida(List<Usuario> jugadoresPartida, Juego juegoPartida) {
+        if (juegoPartida instanceof Ahorcado) {
+            return new PartidaAhorcado(jugadoresPartida, juegoPartida);
+        }
+        return new PartidaPasapalabra(jugadoresPartida, juegoPartida);
     }
 }

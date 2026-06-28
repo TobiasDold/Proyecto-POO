@@ -1,207 +1,277 @@
 package plataformajuegos.controlador;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.io.*;
-import java.time.LocalDate;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
-import plataformajuegos.modelo.partidas.*;
-import plataformajuegos.modelo.usuarios.*;
+import plataformajuegos.modelo.partidas.Puntuacion;
+import plataformajuegos.modelo.usuarios.Administrador;
+import plataformajuegos.modelo.usuarios.Jugador;
+import plataformajuegos.modelo.usuarios.RegistroPartida;
+import plataformajuegos.modelo.usuarios.Usuario;
 
 public class ControladorFicheros {
+    private static final Path DIRECTORIO_DATOS =
+            Paths.get("plataformajuegos", "datos");
+    private static final Path RUTA_USUARIOS = DIRECTORIO_DATOS.resolve("usuarios.txt");
+    private static final Path RUTA_HISTORIAL = DIRECTORIO_DATOS.resolve("historial.txt");
+    private static final Path RUTA_GUARDADAS =
+            DIRECTORIO_DATOS.resolve("partidasGuardadas.txt");
 
-    // ===SECCION USUARIOS===\\
+    public ControladorFicheros() {
+        asegurarFicheros();
+    }
 
-    // Para leer usuarios de la BBDD/fichero txt.
     public List<Usuario> cargarUsuarios() {
         List<Usuario> usuarios = new ArrayList<>();
-        String linea;
-        try (BufferedReader br = new BufferedReader(new FileReader("plataformajuegos/datos/usuarios.txt"))) {
-            while ((linea = br.readLine()) != null) {
-                String[] partesUsuario = linea.split("\\|");
-                if (partesUsuario.length == 3) {
-                    if (partesUsuario[2].equals("ADMIN")) {
-                        Usuario nuevoUsuario = new Administrador(partesUsuario[0], partesUsuario[1]);
-                        usuarios.add(nuevoUsuario);
-                    } else {
-                        Usuario nuevoUsuario = new Usuario(partesUsuario[0], partesUsuario[1]);
-                        usuarios.add(nuevoUsuario);
-                    }
-                }
+        for (String linea : leerLineas(RUTA_USUARIOS)) {
+            String[] partes = linea.split("\\|", 3);
+            if (partes.length == 3) {
+                usuarios.add(crearUsuario(partes[0], partes[1], partes[2]));
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
         return usuarios;
     }
 
-    // Busca al usuario y si existe devuelve el usuario del tipo que debe y sino
-    // devuelve null
     public String[] obtenerUsuario(String username) {
-        String linea;
-        try (BufferedReader br = new BufferedReader(new FileReader("plataformajuegos/datos/usuarios.txt"))) {
-            while ((linea = br.readLine()) != null) {
-                String[] usuario = linea.split("\\|");
-                if (usuario.length == 3 && usuario[0].equals(username)) {
-                    return usuario;
-                }
-
+        if (username == null) {
+            return null;
+        }
+        for (String linea : leerLineas(RUTA_USUARIOS)) {
+            String[] usuario = linea.split("\\|", 3);
+            if (usuario.length == 3 && usuario[0].equalsIgnoreCase(username.trim())) {
+                return usuario;
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
         return null;
     }
 
-    // Para guardar usuarios en BBDD/fichero txt.
+    public Usuario validarCredenciales(String username, String password) {
+        String[] datos = obtenerUsuario(username);
+        if (datos == null || password == null || !datos[1].equals(password)) {
+            return null;
+        }
+        return crearUsuario(datos[0], datos[1], datos[2]);
+    }
+
     public void guardarUsuarios(Usuario usuario) {
-        try (PrintWriter pw = new PrintWriter(new FileWriter("plataformajuegos/datos/usuarios.txt", true))) {
-            pw.println(usuario.toString());
-            pw.flush();
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (usuario == null) {
+            throw new IllegalArgumentException("El usuario no puede ser null.");
         }
+        appendLinea(RUTA_USUARIOS, usuario.toString());
     }
 
-    // Para verificar si el usuario existe.
     public boolean existeUsuario(String username) {
-        String linea;
-        try (BufferedReader br = new BufferedReader(new FileReader("plataformajuegos/datos/usuarios.txt"))) {
-            while ((linea = br.readLine()) != null) {
-                int sep = linea.indexOf('|');
-                if (sep == -1) {
-                    continue;
-                }
+        return obtenerUsuario(username) != null;
+    }
 
-                String nombreUsuario = linea.substring(0, sep);
-                if (nombreUsuario.equals(username)) {
-                    return true;
-                }
+    public boolean actualizarRolUsuario(String username, String nuevoRol) {
+        if (username == null || nuevoRol == null) {
+            return false;
+        }
+
+        String rolNormalizado = nuevoRol.trim().toUpperCase();
+        if (!"ADMIN".equals(rolNormalizado) && !"JUGADOR".equals(rolNormalizado)) {
+            return false;
+        }
+
+        List<String> lineas = leerLineas(RUTA_USUARIOS);
+        boolean actualizado = false;
+        for (int i = 0; i < lineas.size(); i++) {
+            String[] partes = lineas.get(i).split("\\|", 3);
+            if (partes.length == 3 && partes[0].equalsIgnoreCase(username.trim())) {
+                lineas.set(i, partes[0] + "|" + partes[1] + "|" + rolNormalizado);
+                actualizado = true;
+                break;
             }
-        } catch (Exception e) {
-            System.out.println(e.getStackTrace() + "\n" + e.getMessage());
         }
-        return false;
+        if (actualizado) {
+            escribirLineas(RUTA_USUARIOS, lineas);
+        }
+        return actualizado;
     }
 
-    public void actualizarRolUsuario(String username, String nuevoRol) {
-    }
-
-    // ===SECCION PARTIDAS===\\
     public void registrarPartida(RegistroPartida partida) {
-        try (PrintWriter pw = new PrintWriter(new FileWriter("plataformajuegos/datos/historial.txt", true))) {
-            pw.println(partida.toString());
-            pw.flush();
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (partida == null) {
+            throw new IllegalArgumentException("El registro de partida no puede ser null.");
         }
+        appendLinea(RUTA_HISTORIAL, partida.toString());
     }
 
     public List<RegistroPartida> cargarHistorial() {
-        List<RegistroPartida> partida = new ArrayList<>();
-        String linea;
-        try (BufferedReader br = new BufferedReader(new FileReader("plataformajuegos/datos/historial.txt"))) {
-            while ((linea = br.readLine()) != null) {
-                String partesPartida[] = linea.split("\\|");
-                if (partesPartida.length == 4) {
-                    try {
-                        LocalDateTime fecha = LocalDateTime.parse(partesPartida[2].trim());
-                        int puntuacion = Integer.parseInt(partesPartida[3].trim());
-                        partida.add(new RegistroPartida(partesPartida[0].trim(), partesPartida[1].trim(), fecha, puntuacion));
-                    } catch (java.time.format.DateTimeParseException e) {
-                        System.out.println("El formato de la fecha es incorrecto.");
-                    } catch (NumberFormatException e) {
-                        System.out.println("La puntuacion no es un numero valido.");
-                    }
-                }
+        List<RegistroPartida> partidas = new ArrayList<>();
+        for (String linea : leerLineas(RUTA_HISTORIAL)) {
+            RegistroPartida partida = parsearRegistro(linea);
+            if (partida != null) {
+                partidas.add(partida);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-        return partida;
+        return partidas;
     }
 
     public List<RegistroPartida> cargarPartidasDe(String username) {
-        List<RegistroPartida> partida = new ArrayList<>();
-        String linea;
-        try (BufferedReader br = new BufferedReader(new FileReader("plataformajuegos/datos/historial.txt"))) {
-            while ((linea = br.readLine()) != null) {
-                String partesPartida[] = linea.split("\\|");
-                if (partesPartida.length == 4) {
-                    if ((partesPartida[0].trim()).equals(username.trim()))
-                        try {
-                            LocalDateTime fecha = LocalDateTime.parse(partesPartida[2].trim());
-                            int puntuacion = Integer.parseInt(partesPartida[3].trim());
-                            partida.add(new RegistroPartida(partesPartida[0].trim(), partesPartida[1].trim(), fecha, puntuacion));
-                        } catch (java.time.format.DateTimeParseException e) {
-                            System.out.println("El formato de la fecha es incorrecto.");
-                        } catch (NumberFormatException e) {
-                            System.out.println("La puntuacion no es un numero valido.");
-                        }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        List<RegistroPartida> partidas = new ArrayList<>();
+        if (username == null) {
+            return partidas;
         }
-        return partida;
+        for (RegistroPartida partida : cargarHistorial()) {
+            if (partida.getNombreJugador().equalsIgnoreCase(username.trim())) {
+                partidas.add(partida);
+            }
+        }
+        Collections.sort(partidas, new Comparator<RegistroPartida>() {
+            @Override
+            public int compare(RegistroPartida primera, RegistroPartida segunda) {
+                return segunda.getFecha().compareTo(primera.getFecha());
+            }
+        });
+        return partidas;
     }
 
-    // ===SECCION PARTIDAS GUARDADAS===\\
-    public void guardarEstado(String username, String juego, String estado) {
-        eliminarGuardada(username, juego);
-        try (PrintWriter pw = new PrintWriter(new FileWriter("plataformajuegos/datos/partidasGuardadas.txt"), true)) {
-            pw.println(username + "\\|" + juego + "|" + estado);
-        } catch (Exception e) {
-            e.printStackTrace();
+    public List<Puntuacion> cargarRanking(String nombreJuego) {
+        Map<String, Integer> mejoresPuntuaciones = new LinkedHashMap<>();
+        for (RegistroPartida partida : cargarHistorial()) {
+            if (nombreJuego == null
+                    || partida.getNombreJuego().equalsIgnoreCase(nombreJuego.trim())) {
+                Integer anterior = mejoresPuntuaciones.get(partida.getNombreJugador());
+                if (anterior == null || partida.getPuntuacion() > anterior.intValue()) {
+                    mejoresPuntuaciones.put(partida.getNombreJugador(),
+                            partida.getPuntuacion());
+                }
+            }
         }
+
+        List<Puntuacion> ranking = new ArrayList<>();
+        for (Map.Entry<String, Integer> entrada : mejoresPuntuaciones.entrySet()) {
+            ranking.add(new Puntuacion(entrada.getKey(), entrada.getValue()));
+        }
+        Collections.sort(ranking);
+        return ranking;
+    }
+
+    public void guardarEstado(String username, String juego, String estado) {
+        if (username == null || juego == null || estado == null) {
+            throw new IllegalArgumentException("No se puede guardar un estado incompleto.");
+        }
+        eliminarGuardada(username, juego);
+        String estadoCodificado = Base64.getEncoder().encodeToString(
+                estado.getBytes(StandardCharsets.UTF_8));
+        appendLinea(RUTA_GUARDADAS,
+                username.trim() + "|" + juego.trim() + "|" + estadoCodificado);
     }
 
     public String cargarEstado(String username, String juego) {
-        String userABuscar = username.trim();
-        String juegoABuscar = juego.trim();
-        try (BufferedReader br = new BufferedReader(new FileReader("plataformajuegos/datos/partidasGuardadas.txt"))) {
-            String linea;
-            while ((linea = br.readLine()) != null) {
-                String[] partesPartida = linea.split("\\|");
-                if (partesPartida.length == 3) {
-                    if ((partesPartida[0].trim()).equals(userABuscar)
-                            && (partesPartida[1].trim()).equals(juegoABuscar)) {
-                        return partesPartida[2];
-                    }
+        if (username == null || juego == null) {
+            return null;
+        }
+        for (String linea : leerLineas(RUTA_GUARDADAS)) {
+            String[] partes = linea.split("\\|", 3);
+            if (partes.length == 3
+                    && partes[0].equalsIgnoreCase(username.trim())
+                    && partes[1].equalsIgnoreCase(juego.trim())) {
+                try {
+                    return new String(Base64.getDecoder().decode(partes[2]),
+                            StandardCharsets.UTF_8);
+                } catch (IllegalArgumentException e) {
+                    return null;
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
         return null;
     }
 
-    public void eliminarGuardada(String username, String juego) {
-        String ruta = "plataformajuegos/datos/partidasGuardadas.txt";
-        String userAEliminar = username.trim();
-        String juegoAEliminar = juego.trim();
-        List<String> partidaExistentes = new ArrayList<>();
-        try (BufferedReader bf = new BufferedReader(new FileReader(ruta))) {
-            String linea;
-            while ((linea = bf.readLine()) != null) {
-                String[] partesLineaActual = linea.split("\\|");
-                boolean partidaAEliminar = (partesLineaActual[0].trim().equals(userAEliminar)
-                        && (partesLineaActual[1].trim()).equals(juegoAEliminar));
-                if (!partidaAEliminar) {
-                    partidaExistentes.add(linea);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public boolean tieneEstadoGuardado(String username, String juego) {
+        return cargarEstado(username, juego) != null;
+    }
 
-        try (PrintWriter pw = new PrintWriter(new FileWriter(ruta))) {
-            for(String linea : partidaExistentes){
-                pw.println(linea);
+    public void eliminarGuardada(String username, String juego) {
+        if (username == null || juego == null) {
+            return;
+        }
+        List<String> restantes = new ArrayList<>();
+        for (String linea : leerLineas(RUTA_GUARDADAS)) {
+            String[] partes = linea.split("\\|", 3);
+            boolean eliminar = partes.length == 3
+                    && partes[0].equalsIgnoreCase(username.trim())
+                    && partes[1].equalsIgnoreCase(juego.trim());
+            if (!eliminar) {
+                restantes.add(linea);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        }
+        escribirLineas(RUTA_GUARDADAS, restantes);
+    }
+
+    private RegistroPartida parsearRegistro(String linea) {
+        String[] partes = linea.split("\\|", 4);
+        if (partes.length != 4) {
+            return null;
+        }
+        try {
+            return new RegistroPartida(partes[0].trim(), partes[1].trim(),
+                    LocalDateTime.parse(partes[2].trim()),
+                    Integer.parseInt(partes[3].trim()));
+        } catch (RuntimeException e) {
+            return null;
+        }
+    }
+
+    private Usuario crearUsuario(String username, String password, String rol) {
+        if ("ADMIN".equalsIgnoreCase(rol.trim())) {
+            return new Administrador(username, password);
+        }
+        return new Jugador(username, password);
+    }
+
+    private void asegurarFicheros() {
+        try {
+            Files.createDirectories(DIRECTORIO_DATOS);
+            crearSiNoExiste(RUTA_USUARIOS);
+            crearSiNoExiste(RUTA_HISTORIAL);
+            crearSiNoExiste(RUTA_GUARDADAS);
+        } catch (IOException e) {
+            throw new IllegalStateException("No se pudo preparar la carpeta de datos.", e);
+        }
+    }
+
+    private void crearSiNoExiste(Path ruta) throws IOException {
+        if (!Files.exists(ruta)) {
+            Files.createFile(ruta);
+        }
+    }
+
+    private List<String> leerLineas(Path ruta) {
+        try {
+            return Files.readAllLines(ruta, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            throw new IllegalStateException("No se pudo leer " + ruta + ".", e);
+        }
+    }
+
+    private void escribirLineas(Path ruta, List<String> lineas) {
+        try {
+            Files.write(ruta, lineas, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            throw new IllegalStateException("No se pudo escribir " + ruta + ".", e);
+        }
+    }
+
+    private void appendLinea(Path ruta, String linea) {
+        try {
+            Files.write(ruta, Collections.singletonList(linea), StandardCharsets.UTF_8,
+                    StandardOpenOption.APPEND);
+        } catch (IOException e) {
+            throw new IllegalStateException("No se pudo escribir " + ruta + ".", e);
         }
     }
 }

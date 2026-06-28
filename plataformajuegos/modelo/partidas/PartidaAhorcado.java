@@ -1,21 +1,16 @@
 package plataformajuegos.modelo.partidas;
 
-import plataformajuegos.modelo.juegos.*;
-import plataformajuegos.modelo.usuarios.*;
+import java.util.List;
 
-public class PartidaAhorcado extends Partida{
+import plataformajuegos.modelo.juegos.Juego;
+import plataformajuegos.modelo.usuarios.Usuario;
 
+public class PartidaAhorcado extends Partida {
     public PartidaAhorcado(Usuario jugador, Juego juego) {
         super(jugador, juego);
     }
-    
-    public void iniciar(){}
-    public void pausar(){}
-    public String serializarEstado(){return null;}
-    public void deserializarEstado(String estado){}
 
-    @Override
-    public String obtenerEstadoVisual() {
-        return null;
+    public PartidaAhorcado(List<Usuario> jugadores, Juego juego) {
+        super(jugadores, juego);
     }
 }

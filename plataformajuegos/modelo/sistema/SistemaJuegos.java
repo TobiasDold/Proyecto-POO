@@ -2,48 +2,51 @@ package plataformajuegos.modelo.sistema;
 
 import java.util.List;
 
-import plataformajuegos.controlador.*;
-import plataformajuegos.modelo.usuarios.*;
+import plataformajuegos.controlador.ControladorFicheros;
+import plataformajuegos.modelo.partidas.Puntuacion;
+import plataformajuegos.modelo.usuarios.Jugador;
+import plataformajuegos.modelo.usuarios.RegistroPartida;
+import plataformajuegos.modelo.usuarios.Usuario;
 
 public class SistemaJuegos {
+    private final ControladorFicheros controladorFicheros;
+
+    public SistemaJuegos() {
+        controladorFicheros = new ControladorFicheros();
+    }
 
     public boolean registrar(String username, String password) {
-        ControladorFicheros cf = new ControladorFicheros();
-        if (cf.existeUsuario(username)) {
-            System.out.println("El usuario ya existe.");
+        String nombre = username == null ? "" : username.trim();
+        if (nombre.length() < 3 || nombre.contains("|") || nombre.contains(":")
+                || nombre.contains(",")) {
             return false;
         }
-
-        Usuario nuevoUsuario = new Usuario(username, password);
-        cf.guardarUsuarios(nuevoUsuario);
-
-        System.out.println("Usuario creado correctamente.");
+        if (password == null || password.length() < 4
+                || controladorFicheros.existeUsuario(nombre)) {
+            return false;
+        }
+        controladorFicheros.guardarUsuarios(new Jugador(nombre, password));
         return true;
     }
 
     public Usuario login(String username, String password) {
-        ControladorFicheros cf = new ControladorFicheros();
-        String[] partesUsuario = cf.obtenerUsuario(username);
-
-        if (partesUsuario == null) {
-            System.out.println("El usuario no existe.");
-            return null;
-        }
-
-        if (!partesUsuario[1].equals(password)) {
-            System.out.println("Contraseña incorrecta.");
-            return null;
-        }
-
-        System.out.println("Se ha loggeado correctamente.");
-        if (partesUsuario[2].equals("ADMIN")) {
-            return new Administrador(partesUsuario[0], partesUsuario[1], partesUsuario[2]);
-        } else {
-            return new Usuario(partesUsuario[0], partesUsuario[1], partesUsuario[2]);
-        }
+        return controladorFicheros.validarCredenciales(
+                username == null ? "" : username.trim(), password);
     }
-    
-    // List<RegistroPartida> obtenerEstadisticasJugador(String username){}
-    // List<RegistroPartida> obtenerEstadisticasJuego(String nombreJuego){}
-    // List<Usuario> obtenerTodosUsuarios(){}
+
+    public List<RegistroPartida> obtenerEstadisticasJugador(String username) {
+        return controladorFicheros.cargarPartidasDe(username);
+    }
+
+    public List<Puntuacion> obtenerEstadisticasJuego(String nombreJuego) {
+        return controladorFicheros.cargarRanking(nombreJuego);
+    }
+
+    public List<Usuario> obtenerTodosUsuarios() {
+        return controladorFicheros.cargarUsuarios();
+    }
+
+    public ControladorFicheros getControladorFicheros() {
+        return controladorFicheros;
+    }
 }

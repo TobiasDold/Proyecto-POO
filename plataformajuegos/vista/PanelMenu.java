@@ -20,7 +20,6 @@ public class PanelMenu extends JPanel implements ActionListener {
     private BotonRedondeado botonEstadisticas;
     private BotonRedondeado botonAdmin;
     private ControladorPrincipal cp;
-    private Usuario user;
 
     private JLabel labelNombreUsuario;
     private JLabel labelRolUsuario;
@@ -77,8 +76,8 @@ public class PanelMenu extends JPanel implements ActionListener {
         JPanel vistaUsuario = crearVistaUsuario();
         JPanel vistaAdmin = crearVistaAdmin();
 
-        contenedorDer.add(crearVistaUsuario(), "VistaUsuario");
-        contenedorDer.add(crearVistaAdmin(), "VistaAdmin");
+        contenedorDer.add(vistaUsuario, "VistaUsuario");
+        contenedorDer.add(vistaAdmin, "VistaAdmin");
         gbc.gridy = 0;
         gbc.gridx = 1;
         gbc.weightx = 0.6;
@@ -115,6 +114,8 @@ public class PanelMenu extends JPanel implements ActionListener {
         botonPasapalabra.setBounds(60, 300, 220, 150);
         botonPasapalabra.setBackground(Color.WHITE);
         botonPasapalabra.setFocusPainted(false);
+        botonPasapalabra.setActionCommand("PASAPALABRA");
+        botonPasapalabra.addActionListener(this);
         vistaUsuario.add(botonPasapalabra);
 
         botonAhorcado = new BotonRedondeado(
@@ -123,12 +124,16 @@ public class PanelMenu extends JPanel implements ActionListener {
         botonAhorcado.setBounds(290, 300, 220, 150);
         botonAhorcado.setBackground(Color.WHITE);
         botonAhorcado.setFocusPainted(false);
+        botonAhorcado.setActionCommand("AHORCADO");
+        botonAhorcado.addActionListener(this);
         vistaUsuario.add(botonAhorcado);
 
         botonEstadisticas = new BotonRedondeado("<html><font size='5'><b>Estadisticas</b></font></html>", 20);
         botonEstadisticas.setBounds(60, 460, 450, 50);
         botonEstadisticas.setBackground(Color.WHITE);
         botonEstadisticas.setFocusPainted(false);
+        botonEstadisticas.setActionCommand("ESTADISTICAS");
+        botonEstadisticas.addActionListener(this);
         vistaUsuario.add(botonEstadisticas);
 
         labelNombreUsuario = new JLabel("");
@@ -193,6 +198,8 @@ public class PanelMenu extends JPanel implements ActionListener {
         botonPasapalabra.setBounds(60, 300, 220, 150);
         botonPasapalabra.setBackground(Color.WHITE);
         botonPasapalabra.setFocusPainted(false);
+        botonPasapalabra.setActionCommand("PASAPALABRA");
+        botonPasapalabra.addActionListener(this);
         vistaAdmin.add(botonPasapalabra);
 
         botonAhorcado = new BotonRedondeado(
@@ -201,18 +208,24 @@ public class PanelMenu extends JPanel implements ActionListener {
         botonAhorcado.setBounds(290, 300, 220, 150);
         botonAhorcado.setBackground(Color.WHITE);
         botonAhorcado.setFocusPainted(false);
+        botonAhorcado.setActionCommand("AHORCADO");
+        botonAhorcado.addActionListener(this);
         vistaAdmin.add(botonAhorcado);
 
         botonEstadisticas = new BotonRedondeado("<html><font size='5'><b>Estadisticas</b></font></html>", 20);
         botonEstadisticas.setBounds(60, 460, 220, 50);
         botonEstadisticas.setBackground(Color.WHITE);
         botonEstadisticas.setFocusPainted(false);
+        botonEstadisticas.setActionCommand("ESTADISTICAS");
+        botonEstadisticas.addActionListener(this);
         vistaAdmin.add(botonEstadisticas);
 
         botonAdmin = new BotonRedondeado("<html><font size='5'><b>Panel Admin</b></font></html>", 20);
         botonAdmin.setBounds(290, 460, 220, 50);
         botonAdmin.setBackground(Color.WHITE);
         botonAdmin.setFocusPainted(false);
+        botonAdmin.setActionCommand("ADMIN");
+        botonAdmin.addActionListener(this);
         vistaAdmin.add(botonAdmin);
 
         labelNombreAdmin = new JLabel("");
@@ -249,6 +262,16 @@ public class PanelMenu extends JPanel implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent event) {
+        String comando = event.getActionCommand();
+        if ("AHORCADO".equals(comando)) {
+            cp.seleccionarJuego("Ahorcado");
+        } else if ("PASAPALABRA".equals(comando)) {
+            cp.seleccionarJuego("Pasapalabra");
+        } else if ("ESTADISTICAS".equals(comando)) {
+            cp.mostrarEstadisticas();
+        } else if ("ADMIN".equals(comando)) {
+            cp.mostrarAdmin();
+        }
     }
 
     public void mostrarVistaSegunRol() {
