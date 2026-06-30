@@ -9,6 +9,7 @@ import plataformajuegos.modelo.juegos.*;
 import plataformajuegos.modelo.sistema.SistemaJuegos;
 import plataformajuegos.modelo.usuarios.*;
 import plataformajuegos.vista.*;
+import plataformajuegos.modelo.partidas.*;
 
 public class ControladorPrincipal {
     private final SistemaJuegos sistemaJuegos = new SistemaJuegos();
@@ -17,6 +18,7 @@ public class ControladorPrincipal {
     private VentanaPrincipal ventana;
     private PanelMenu panelMenu;
     private ControladorJuego controladorJuegoActual;
+    private String nombreJuego;
 
     public void iniciar() {
         ventana = new VentanaPrincipal(this);
@@ -50,6 +52,7 @@ public class ControladorPrincipal {
     }
 
     public void seleccionarJuego(String nombreJuego) {
+        this.nombreJuego = nombreJuego;
         if (usuarioActual == null) {
             mostrarLogin();
             return;

@@ -116,6 +116,10 @@ public class Ahorcado extends Juego {
         return new HashSet<>(letrasUsadas);
     }
 
+    public Set<Character> getLetrasCorrectas() {
+        return letrasCorrectas;
+    }
+
     public boolean hasGanado() {
         return palabraActual != null && palabraSecreta != null
                 && palabraActual.toString().equals(palabraSecreta);
