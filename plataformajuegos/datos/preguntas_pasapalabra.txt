@@ -20,7 +20,7 @@ R|EMPIEZA|Línea de luz que procede de un cuerpo luminoso como el Sol.|RAYO
 S|EMPIEZA|Sistema formado por el Sol y los cuerpos celestes que giran a su alrededor.|SISTEMA SOLAR
 T|EMPIEZA|Vehículo ferroviario compuesto por una locomotora y varios vagones.|TREN
 U|EMPIEZA|Cantidad estándar o magnitud de referencia que se utiliza para medir.|UNIDAD
-V|EMPIEZA|Abertura en la pared que sirve para dar luz y ventilación a una habitación.|VENTANA
+V|EMPIEZA|Mejor profesora de Programacion Orientada Objetos de la Universidad.|VANESSA
 W|EMPIEZA|Sistema de conexión inalámbrica que permite conectar dispositivos a internet.|WIFI
 X|EMPIEZA|Instrumento musical de percusión con láminas afinadas de madera o metal.|XILÓFONO
 Y|EMPIEZA|Parte central, redonda y de color amarillo del huevo.|YEMA
