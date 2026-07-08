@@ -3,7 +3,6 @@ package plataformajuegos.vista;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.*;
 
